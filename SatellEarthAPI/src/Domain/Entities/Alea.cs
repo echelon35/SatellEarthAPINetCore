@@ -9,4 +9,6 @@ public class Alea : BaseEntity
 {
     public string Title { get; set; }
     public string Legend { get; set; }
+
+    public IList<Disaster> Disasters { get; private set; } = new List<Disaster>();
 }

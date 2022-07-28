@@ -84,12 +84,48 @@ public class ApplicationDbContextInitialiser
                 new TodoItem { Title = "Reward yourself with a nice, long nap 🏆" },
                 new TodoItem { Title = "Ok let's go 🏆" },
             }
-            });
+            }); 
 
+            await _context.SaveChangesAsync();
+        }
+
+        if (!_context.Aleas.Any())
+        {
             _context.Aleas.Add(new Alea { Title = "Foudre", Legend = "Foudre" });
-            _context.Aleas.Add(new Alea { Title = "Feu", Legend = "Feux de forêts" });
+            _context.Aleas.Add(new Alea { Title = "Feu", 
+                Legend = "Feux de forêts", 
+                Disasters =
+                {
+                    new Disaster
+                    {
+                        PremierReleve = DateTime.Now.AddDays(-10),
+                        DernierReleve = DateTime.Now.AddDays(-5),
+                        LienSource = "https://gdacs.com",
+                        Visible = true,
+                        NbRessenti = 1
+                    },
+                    new Disaster
+                    {
+                        PremierReleve = DateTime.Now.AddDays(-27),
+                        DernierReleve = DateTime.Now,
+                        LienSource = "https://usgs.com",
+                        Visible = false,
+                        NbRessenti = 2500
+                    }
+                }
+            });
             _context.Aleas.Add(new Alea { Title = "Tsunami", Legend = "Tsunami et submersion" });
-            _context.Aleas.Add(new Alea { Title = "Seisme", Legend = "Seisme" });
+            _context.Aleas.Add(new Alea { Title = "Seisme", 
+                Legend = "Seisme", 
+                Disasters = { new Disaster
+                {
+                    PremierReleve = DateTime.Now.AddDays(-30),
+                    DernierReleve = DateTime.Now,
+                    LienSource = "https://satellearth.com",
+                    Visible = true,
+                    NbRessenti = 10
+                } }
+            });
 
             await _context.SaveChangesAsync();
         }
