@@ -7,46 +7,45 @@ using SatellEarthAPI.Infrastructure.Persistence;
 using SatellEarthAPI.WebUI.Filters;
 using SatellEarthAPI.WebUI.Services;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class ConfigureServices
 {
-    public static class ConfigureServices
+    public static IServiceCollection AddWebUIServices(this IServiceCollection services)
     {
-        public static IServiceCollection AddWebUIServices(this IServiceCollection services)
+        services.AddDatabaseDeveloperPageExceptionFilter();
+
+        services.AddSingleton<ICurrentUserService, CurrentUserService>();
+
+        services.AddHttpContextAccessor();
+
+        services.AddHealthChecks()
+            .AddDbContextCheck<ApplicationDbContext>();
+
+        services.AddControllersWithViews(options =>
+            options.Filters.Add<ApiExceptionFilterAttribute>())
+                .AddFluentValidation(x => x.AutomaticValidationEnabled = false);
+
+        services.AddRazorPages();
+
+        // Customise default API behaviour
+        services.Configure<ApiBehaviorOptions>(options =>
+            options.SuppressModelStateInvalidFilter = true);
+
+        services.AddOpenApiDocument(configure =>
         {
-            services.AddDatabaseDeveloperPageExceptionFilter();
-
-            services.AddSingleton<ICurrentUserService, CurrentUserService>();
-
-            services.AddHttpContextAccessor();
-
-            services.AddHealthChecks()
-                .AddDbContextCheck<ApplicationDbContext>();
-
-            services.AddControllersWithViews(options =>
-                options.Filters.Add<ApiExceptionFilterAttribute>())
-                    .AddFluentValidation(x => x.AutomaticValidationEnabled = false);
-
-            services.AddRazorPages();
-
-            // Customise default API behaviour
-            services.Configure<ApiBehaviorOptions>(options =>
-                options.SuppressModelStateInvalidFilter = true);
-
-            services.AddOpenApiDocument(configure =>
+            configure.Title = "SatellEarthAPI API";
+            configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
             {
-                configure.Title = "SatellEarthAPI API";
-                configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
-                {
-                    Type = OpenApiSecuritySchemeType.ApiKey,
-                    Name = "Authorization",
-                    In = OpenApiSecurityApiKeyLocation.Header,
-                    Description = "Type into the textbox: Bearer {your JWT token}."
-                });
-
-                configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+                Type = OpenApiSecuritySchemeType.ApiKey,
+                Name = "Authorization",
+                In = OpenApiSecurityApiKeyLocation.Header,
+                Description = "Type into the textbox: Bearer {your JWT token}."
             });
 
-            return services;
-        }
+            configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+        });
+
+        return services;
     }
 }

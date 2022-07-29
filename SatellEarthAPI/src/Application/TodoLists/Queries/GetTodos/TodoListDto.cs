@@ -1,21 +1,20 @@
 ﻿using SatellEarthAPI.Application.Common.Mappings;
 using SatellEarthAPI.Domain.Entities;
 
-namespace SatellEarthAPI.Application.TodoLists.Queries.GetTodos
+namespace SatellEarthAPI.Application.TodoLists.Queries.GetTodos;
+
+public class TodoListDto : IMapFrom<TodoList>
 {
-    public class TodoListDto : IMapFrom<TodoList>
+    public TodoListDto()
     {
-        public TodoListDto()
-        {
-            Items = new List<TodoItemDto>();
-        }
-
-        public int Id { get; set; }
-
-        public string? Title { get; set; }
-
-        public string? Colour { get; set; }
-
-        public IList<TodoItemDto> Items { get; set; }
+        Items = new List<TodoItemDto>();
     }
+
+    public int Id { get; set; }
+
+    public string? Title { get; set; }
+
+    public string? Colour { get; set; }
+
+    public IList<TodoItemDto> Items { get; set; }
 }
