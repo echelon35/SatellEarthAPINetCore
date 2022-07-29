@@ -1,14 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SatellEarthAPI.Domain.Entities;
 
-namespace SatellEarthAPI.Application.Common.Interfaces
+namespace SatellEarthAPI.Application.Common.Interfaces;
+
+public interface IApplicationDbContext
 {
-    public interface IApplicationDbContext
-    {
-        DbSet<TodoList> TodoLists { get; }
+    DbSet<TodoList> TodoLists { get; }
 
-        DbSet<TodoItem> TodoItems { get; }
+    DbSet<TodoItem> TodoItems { get; }
 
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
-    }
+    DbSet<Disaster> Disasters { get; }
+
+    DbSet<Alea> Aleas { get; }
+
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
