@@ -12,6 +12,8 @@ public class DisasterConfiguration : IEntityTypeConfiguration<Disaster>
 {
     public void Configure(EntityTypeBuilder<Disaster> builder)
     {
+        builder.Property(t => t.Id).ValueGeneratedOnAdd();
+
         builder.Property(t => t.LienSource)
             .HasMaxLength(50)
             .IsRequired();

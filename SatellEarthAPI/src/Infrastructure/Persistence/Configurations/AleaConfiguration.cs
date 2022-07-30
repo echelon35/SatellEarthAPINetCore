@@ -8,6 +8,8 @@ public class AleaConfiguration : IEntityTypeConfiguration<Alea>
 {
     public void Configure(EntityTypeBuilder<Alea> builder)
     {
+        builder.Property(t => t.Id).ValueGeneratedOnAdd();
+
         builder.Property(t => t.Title)
             .HasMaxLength(50)
             .IsRequired();

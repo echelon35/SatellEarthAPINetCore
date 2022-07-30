@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using System;
 
 #nullable disable
@@ -398,6 +399,7 @@ public partial class InitialCreate : Migration
 
     protected void MigratePgSQLDb(MigrationBuilder migrationBuilder)
     {
+
         migrationBuilder.CreateTable(
             name: "AspNetRoles",
             columns: table => new
@@ -418,7 +420,7 @@ public partial class InitialCreate : Migration
             columns: table => new
             {
                 Id = table.Column<int>(type: "int", nullable: false)
-                    .Annotation("SqlServer:Identity", "1, 1"),
+                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                 Title = table.Column<string>(type: "VARCHAR(50)", nullable: false),
                 Legend = table.Column<string>(type: "VARCHAR(50)", nullable: false),
             },
@@ -432,7 +434,7 @@ public partial class InitialCreate : Migration
             columns: table => new
             {
                 Id = table.Column<int>(type: "int", nullable: false)
-                    .Annotation("SqlServer:Identity", "1, 1"),
+                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                 PremierReleve = table.Column<DateTime>(type: "timestamp", nullable: false),
                 DernierReleve = table.Column<DateTime>(type: "timestamp", nullable: false),
                 NbRessenti = table.Column<int>(type: "int", nullable: false),
@@ -542,7 +544,7 @@ public partial class InitialCreate : Migration
             columns: table => new
             {
                 Id = table.Column<int>(type: "int", nullable: false)
-                    .Annotation("SqlServer:Identity", "1, 1"),
+                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                 Title = table.Column<string>(type: "VARCHAR(200)", maxLength: 200, nullable: false),
                 Colour_Code = table.Column<string>(type: "VARCHAR", nullable: false),
                 Created = table.Column<DateTime>(type: "timestamp", nullable: false),
@@ -560,7 +562,7 @@ public partial class InitialCreate : Migration
             columns: table => new
             {
                 Id = table.Column<int>(type: "int", nullable: false)
-                    .Annotation("SqlServer:Identity", "1, 1"),
+                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                 RoleId = table.Column<string>(type: "VARCHAR(450)", nullable: false),
                 ClaimType = table.Column<string>(type: "VARCHAR", nullable: true),
                 ClaimValue = table.Column<string>(type: "VARCHAR", nullable: true)
@@ -581,7 +583,7 @@ public partial class InitialCreate : Migration
             columns: table => new
             {
                 Id = table.Column<int>(type: "int", nullable: false)
-                    .Annotation("SqlServer:Identity", "1, 1"),
+                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                 UserId = table.Column<string>(type: "VARCHAR(450)", nullable: false),
                 ClaimType = table.Column<string>(type: "VARCHAR", nullable: true),
                 ClaimValue = table.Column<string>(type: "VARCHAR", nullable: true)
@@ -666,7 +668,7 @@ public partial class InitialCreate : Migration
             columns: table => new
             {
                 Id = table.Column<int>(type: "int", nullable: false)
-                    .Annotation("SqlServer:Identity", "1, 1"),
+                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                 ListId = table.Column<int>(type: "int", nullable: false),
                 Title = table.Column<string>(type: "VARCHAR(200)", maxLength: 200, nullable: false),
                 Note = table.Column<string>(type: "VARCHAR", nullable: true),
