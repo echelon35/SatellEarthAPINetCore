@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SatellEarthAPI.Domain.Entities;
+using SatellEarthAPI.Infrastructure.Common;
 using SatellEarthAPI.Infrastructure.Identity;
 
 namespace SatellEarthAPI.Infrastructure.Persistence;
@@ -99,16 +100,16 @@ public class ApplicationDbContextInitialiser
                 {
                     new Disaster
                     {
-                        PremierReleve = DateTime.Now.AddDays(-10),
-                        DernierReleve = DateTime.Now.AddDays(-5),
+                        PremierReleve = DateTime.Now.AddDays(-10).SetKindUtc(),
+                        DernierReleve = DateTime.Now.AddDays(-5).SetKindUtc(),
                         LienSource = "https://gdacs.com",
                         Visible = true,
                         NbRessenti = 1
                     },
                     new Disaster
                     {
-                        PremierReleve = DateTime.Now.AddDays(-27),
-                        DernierReleve = DateTime.Now,
+                        PremierReleve = DateTime.Now.AddDays(-27).SetKindUtc(),
+                        DernierReleve = DateTime.Now.SetKindUtc(),
                         LienSource = "https://usgs.com",
                         Visible = false,
                         NbRessenti = 2500
@@ -120,8 +121,8 @@ public class ApplicationDbContextInitialiser
                 Legend = "Seisme", 
                 Disasters = { new Disaster
                 {
-                    PremierReleve = DateTime.Now.AddDays(-30),
-                    DernierReleve = DateTime.Now,
+                    PremierReleve = DateTime.Now.AddDays(-30).SetKindUtc(),
+                    DernierReleve = DateTime.Now.SetKindUtc(),
                     LienSource = "https://satellearth.com",
                     Visible = true,
                     NbRessenti = 10
