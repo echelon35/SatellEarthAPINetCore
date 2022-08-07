@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using System;
 
@@ -18,6 +19,7 @@ public partial class InitialCreate : Migration
         else
         {
             //PostgreSQL migration
+            migrationBuilder.Sql("CREATE EXTENSION IF NOT EXISTS POSTGIS");
             MigratePgSQLDb(migrationBuilder);
         }
     }
@@ -441,6 +443,7 @@ public partial class InitialCreate : Migration
                 LienSource = table.Column<string>(type: "VARCHAR(150)", nullable: true),
                 Visible = table.Column<bool>(type: "boolean", nullable: false),
                 AleaId = table.Column<int>(type: "int", nullable: false),
+                Point = table.Column<Point>(type: "geometry", nullable: false),
                 Created = table.Column<DateTime>(type: "timestamp", nullable: false),
                 CreatedBy = table.Column<string>(type: "VARCHAR", nullable: true),
                 LastModified = table.Column<DateTime>(type: "timestamp", nullable: true),

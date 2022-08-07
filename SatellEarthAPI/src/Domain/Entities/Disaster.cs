@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetTopologySuite.Geometries;
 
 namespace SatellEarthAPI.Domain.Entities;
 public class Disaster : BaseAuditableEntity
@@ -37,6 +38,8 @@ public class Disaster : BaseAuditableEntity
     /// Alea type of disaster
     /// </summary>
     public Alea Alea { get; set; } = null!;
+
+    public Point Point { get; set; }
 
     #endregion Properties
 

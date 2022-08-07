@@ -40,6 +40,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.HasPostgresExtension("postgis");
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         builder.UseIdentityColumns();
         base.OnModelCreating(builder);

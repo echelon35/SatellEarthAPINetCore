@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 using SatellEarthAPI.Domain.Entities;
 using SatellEarthAPI.Infrastructure.Common;
 using SatellEarthAPI.Infrastructure.Identity;
@@ -54,6 +55,11 @@ public class ApplicationDbContextInitialiser
 
     public async Task TrySeedAsync()
     {
+
+        _context.Database.OpenConnection();
+        //Reload types after Postgis extension creation
+        ((NpgsqlConnection)_context.Database.GetDbConnection()).ReloadTypes();
+
         // Default roles
         var administratorRole = new IdentityRole("Administrator");
 
@@ -94,42 +100,52 @@ public class ApplicationDbContextInitialiser
         if (!_context.Aleas.Any())
         {
             _context.Aleas.Add(new Alea { Title = "Foudre", Legend = "Foudre" });
-            _context.Aleas.Add(new Alea { Title = "Feu", 
-                Legend = "Feux de forêts", 
+            _context.Aleas.Add(new Alea
+            {
+                Title = "Feu",
+                Legend = "Feux de forêts",
                 Disasters =
+            {
+                new Disaster
                 {
-                    new Disaster
-                    {
-                        PremierReleve = DateTime.Now.AddDays(-10).SetKindUtc(),
-                        DernierReleve = DateTime.Now.AddDays(-5).SetKindUtc(),
-                        LienSource = "https://gdacs.com",
-                        Visible = true,
-                        NbRessenti = 1
-                    },
-                    new Disaster
-                    {
-                        PremierReleve = DateTime.Now.AddDays(-27).SetKindUtc(),
-                        DernierReleve = DateTime.Now.SetKindUtc(),
-                        LienSource = "https://usgs.com",
-                        Visible = false,
-                        NbRessenti = 2500
-                    }
+                    PremierReleve = DateTime.Now.AddDays(-10).SetKindUtc(),
+                    DernierReleve = DateTime.Now.AddDays(-5).SetKindUtc(),
+                    LienSource = "https://gdacs.com",
+                    Visible = true,
+                    NbRessenti = 1,
+                    Point = new NetTopologySuite.Geometries.Point(-5,5)
+                },
+                new Disaster
+                {
+                    PremierReleve = DateTime.Now.AddDays(-27).SetKindUtc(),
+                    DernierReleve = DateTime.Now.SetKindUtc(),
+                    LienSource = "https://usgs.com",
+                    Visible = false,
+                    NbRessenti = 2500,
+                    Point = new NetTopologySuite.Geometries.Point(0,10)
                 }
+            }
             });
             _context.Aleas.Add(new Alea { Title = "Tsunami", Legend = "Tsunami et submersion" });
-            _context.Aleas.Add(new Alea { Title = "Seisme", 
-                Legend = "Seisme", 
+            _context.Aleas.Add(new Alea
+            {
+                Title = "Seisme",
+                Legend = "Seisme",
                 Disasters = { new Disaster
-                {
-                    PremierReleve = DateTime.Now.AddDays(-30).SetKindUtc(),
-                    DernierReleve = DateTime.Now.SetKindUtc(),
-                    LienSource = "https://satellearth.com",
-                    Visible = true,
-                    NbRessenti = 10
-                } }
+            {
+                PremierReleve = DateTime.Now.AddDays(-30).SetKindUtc(),
+                DernierReleve = DateTime.Now.SetKindUtc(),
+                LienSource = "https://satellearth.com",
+                Visible = true,
+                NbRessenti = 10,
+                Point = new NetTopologySuite.Geometries.Point(10,10)
+            } }
             });
 
             await _context.SaveChangesAsync();
         }
+
+        _context.Database.CloseConnection();
+
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Npgsql;
 using SatellEarthAPI.Application.Common.Interfaces;
 using SatellEarthAPI.Infrastructure.Files;
 using SatellEarthAPI.Infrastructure.Identity;
@@ -26,9 +27,12 @@ public static class ConfigureServices
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
-                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));                
-                //options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                //    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                    builder => builder
+                    .UseNetTopologySuite()
+                    .MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+            //options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+            //    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
         }
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
