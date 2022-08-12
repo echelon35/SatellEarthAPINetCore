@@ -1,9 +1,8 @@
 ﻿using SatellEarthAPI.Application.Common.Interfaces;
 
-namespace SatellEarthAPI.Infrastructure.Services
+namespace SatellEarthAPI.Infrastructure.Services;
+
+public class DateTimeService : IDateTime
 {
-    public class DateTimeService : IDateTime
-    {
-        public DateTime Now => DateTime.Now;
-    }
+    public DateTime Now => DateTime.Now;
 }

@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 
-namespace SatellEarthAPI.Application.Common.Mappings
+namespace SatellEarthAPI.Application.Common.Mappings;
+
+public interface IMapFrom<T>
 {
-    public interface IMapFrom<T>
-    {
-        void Mapping(Profile profile) => profile.CreateMap(typeof(T), GetType());
-    }
+    void Mapping(Profile profile) => profile.CreateMap(typeof(T), GetType());
 }
