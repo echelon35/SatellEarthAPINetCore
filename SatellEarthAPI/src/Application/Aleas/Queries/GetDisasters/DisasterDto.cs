@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using GeoJSON.Net.Geometry;
 using SatellEarthAPI.Application.Common.Mappings;
+using SatellEarthAPI.Application.Resolver;
 using SatellEarthAPI.Domain.Entities;
 
 namespace SatellEarthAPI.Application.Aleas.Queries.GetDisasters;
@@ -19,8 +21,7 @@ public class DisasterDto : IMapFrom<Disaster>
 
     public DateTime DernierReleve { get; set; }
 
-    public void Mapping(Profile profile)
-    {
-        profile.CreateMap<Disaster, DisasterDto>();
-    }
+    public PointDto Point { get; set; } 
+
+
 }

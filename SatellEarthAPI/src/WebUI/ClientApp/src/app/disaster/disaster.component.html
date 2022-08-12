@@ -40,6 +40,8 @@
             <th scope="col">Premier relevé</th>
             <th scope="col">Dernier relevé</th>
             <th scope="col">Lien</th>
+            <th scope="col">Longitude</th>
+            <th scope="col">Latitude</th>
           </tr>
         </thead>
         <tbody>
@@ -48,6 +50,8 @@
             <td>{{ item.premierReleve | date:'dd/MM/yy HH:mm:ss' }}</td>
             <td>{{ item.dernierReleve | date:'dd/MM/yy HH:mm:ss' }}</td>
             <td><a href="{{ item.lienSource }}">{{ item.lienSource }}</a></td>
+            <td>{{item.point.coordinates[0]}}</td>
+            <td>{{item.point.coordinates[1]}}</td>
           </tr>
         </tbody>
       </table>

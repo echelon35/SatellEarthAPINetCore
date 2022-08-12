@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetTopologySuite.Geometries;
+﻿using GeoJSON.Net.Geometry;
 
 namespace SatellEarthAPI.Domain.Entities;
 public class Disaster : BaseAuditableEntity
@@ -39,7 +34,10 @@ public class Disaster : BaseAuditableEntity
     /// </summary>
     public Alea Alea { get; set; } = null!;
 
-    public Point Point { get; set; }
+    /// <summary>
+    /// Localisa
+    /// </summary>
+    public Point Point { get; set; } = null!;
 
     #endregion Properties
 

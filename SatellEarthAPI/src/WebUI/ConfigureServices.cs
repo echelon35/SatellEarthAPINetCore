@@ -15,6 +15,9 @@ public static class ConfigureServices
     {
         services.AddDatabaseDeveloperPageExceptionFilter();
 
+        services.AddControllers().AddNewtonsoftJson();
+
+        //Service with user logic
         services.AddSingleton<ICurrentUserService, CurrentUserService>();
 
         services.AddHttpContextAccessor();
@@ -34,7 +37,7 @@ public static class ConfigureServices
 
         services.AddOpenApiDocument(configure =>
         {
-            configure.Title = "SatellEarthAPI API";
+            configure.Title = "SatellEarth API";
             configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
             {
                 Type = OpenApiSecuritySchemeType.ApiKey,

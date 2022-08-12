@@ -830,6 +830,7 @@ export class DisasterDto implements IDisasterDto {
     lienSource?: string | undefined;
     premierReleve?: Date;
     dernierReleve?: Date;
+    point?: PointDto;
 
     constructor(data?: IDisasterDto) {
         if (data) {
@@ -847,6 +848,7 @@ export class DisasterDto implements IDisasterDto {
             this.lienSource = _data["lienSource"];
             this.premierReleve = _data["premierReleve"] ? new Date(_data["premierReleve"].toString()) : <any>undefined;
             this.dernierReleve = _data["dernierReleve"] ? new Date(_data["dernierReleve"].toString()) : <any>undefined;
+            this.point = _data["point"] ? PointDto.fromJS(_data["point"]) : <any>undefined;
         }
     }
 
@@ -864,6 +866,7 @@ export class DisasterDto implements IDisasterDto {
         data["lienSource"] = this.lienSource;
         data["premierReleve"] = this.premierReleve ? this.premierReleve.toISOString() : <any>undefined;
         data["dernierReleve"] = this.dernierReleve ? this.dernierReleve.toISOString() : <any>undefined;
+        data["point"] = this.point ? this.point.toJSON() : <any>undefined;
         return data;
     }
 }
@@ -874,6 +877,55 @@ export interface IDisasterDto {
     lienSource?: string | undefined;
     premierReleve?: Date;
     dernierReleve?: Date;
+    point?: PointDto;
+}
+
+export class PointDto implements IPointDto {
+    type?: string;
+    coordinates?: number[];
+
+    constructor(data?: IPointDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.type = _data["type"];
+            if (Array.isArray(_data["coordinates"])) {
+                this.coordinates = [] as any;
+                for (let item of _data["coordinates"])
+                    this.coordinates!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): PointDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PointDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["type"] = this.type;
+        if (Array.isArray(this.coordinates)) {
+            data["coordinates"] = [];
+            for (let item of this.coordinates)
+                data["coordinates"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IPointDto {
+    type?: string;
+    coordinates?: number[];
 }
 
 export class PaginatedListOfDisasterBriefDto implements IPaginatedListOfDisasterBriefDto {

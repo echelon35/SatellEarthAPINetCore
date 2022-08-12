@@ -1,8 +1,12 @@
+using System.Text.Json;
+using GeoJSON.Net.Geometry;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Npgsql;
 using SatellEarthAPI.Domain.Entities;
+using SatellEarthAPI.Domain.ValueObjects;
 using SatellEarthAPI.Infrastructure.Common;
 using SatellEarthAPI.Infrastructure.Identity;
 
@@ -55,7 +59,6 @@ public class ApplicationDbContextInitialiser
 
     public async Task TrySeedAsync()
     {
-
         _context.Database.OpenConnection();
         //Reload types after Postgis extension creation
         ((NpgsqlConnection)_context.Database.GetDbConnection()).ReloadTypes();
@@ -94,11 +97,21 @@ public class ApplicationDbContextInitialiser
             }
             }); 
 
-            await _context.SaveChangesAsync();
         }
+
+        var gf = NetTopologySuite.NtsGeometryServices.Instance.CreateGeometryFactory(4326);
 
         if (!_context.Aleas.Any())
         {
+
+            string geojson1 = @"{
+                ""type"": ""Point"",
+                ""coordinates"": [
+                    4.57031,
+                    47.3983
+                ]
+            }";
+
             _context.Aleas.Add(new Alea { Title = "Foudre", Legend = "Foudre" });
             _context.Aleas.Add(new Alea
             {
@@ -113,8 +126,8 @@ public class ApplicationDbContextInitialiser
                     LienSource = "https://gdacs.com",
                     Visible = true,
                     NbRessenti = 1,
-                    Point = new NetTopologySuite.Geometries.Point(-5,5)
-                },
+                    Point = JsonConvert.DeserializeObject<Point>(geojson1)
+        },
                 new Disaster
                 {
                     PremierReleve = DateTime.Now.AddDays(-27).SetKindUtc(),
@@ -122,7 +135,7 @@ public class ApplicationDbContextInitialiser
                     LienSource = "https://usgs.com",
                     Visible = false,
                     NbRessenti = 2500,
-                    Point = new NetTopologySuite.Geometries.Point(0,10)
+                    Point = JsonConvert.DeserializeObject<Point>(geojson1)
                 }
             }
             });
@@ -138,12 +151,73 @@ public class ApplicationDbContextInitialiser
                 LienSource = "https://satellearth.com",
                 Visible = true,
                 NbRessenti = 10,
-                Point = new NetTopologySuite.Geometries.Point(10,10)
+                Point = JsonConvert.DeserializeObject<Point>(geojson1)
             } }
             });
 
-            await _context.SaveChangesAsync();
         }
+
+        if (!_context.Pays.Any())
+        {
+            string geojson = "{\"type\":\"Polygon\",\"coordinates\":[[[-63.001220703,18.221777344],[-63.160009766,18.171386719],[-63.153320313,18.200292969],[-63.026025391,18.269726562],[-62.979589844,18.264794922],[-63.001220703,18.221777344]]]}";
+            _context.Pays.Add(new Pays
+            {
+                Surface = JsonConvert.DeserializeObject<MultiPolygon>(geojson),
+                NameFr = "Anguilla",
+                NameUs = "Anguilla",
+                Trigramme = "AIA"
+            });
+
+            string geojson2 = @"{
+                ""type"": ""Polygon"",
+                ""coordinates"": [
+                    [
+                    [
+                        0.87890625,
+                        50.680797145321655
+                    ],
+                    [
+                        -4.5703125,
+                        47.87214396888731
+                    ],
+                    [
+                        -0.791015625,
+                        43.004647127794435
+                    ],
+                    [
+                        4.306640625,
+                        42.09822241118974
+                    ],
+                    [
+                        7.734374999999999,
+                        43.45291889355465
+                    ],
+                    [
+                        6.591796875,
+                        46.86019101567027
+                    ],
+                    [
+                        8.4375,
+                        49.439556958940855
+                    ],
+                    [
+                        0.87890625,
+                        50.680797145321655
+                    ]
+                    ]
+                ]
+            }";
+
+            _context.Pays.Add(new Pays
+            {
+                Surface = JsonConvert.DeserializeObject<MultiPolygon>(geojson2),
+                NameFr = "France",
+                NameUs = "France",
+                Trigramme = "FRA"
+            });
+        }
+
+        await _context.SaveChangesAsync();
 
         _context.Database.CloseConnection();
 

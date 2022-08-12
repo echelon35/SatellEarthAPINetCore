@@ -10,7 +10,6 @@ export class DisasterComponent implements OnInit {
   debug = false;
   aleaList: AleaDto[];
   disasterList: DisasterDto[];
-  //selectedAlea: AleaDto;
   selectedDisaster: DisasterDto;
   selectedAlea: AleaDto;
 
